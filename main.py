@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from itertools import islice
 import gspread
 from gspread.exceptions import SpreadsheetNotFound, APIError, GSpreadException
+import json, os, base64
 
 
 def fetch_json_data(url):
@@ -38,16 +39,19 @@ def fetch_json_data(url):
         return None
 
 
-def authenticate_gspread(json_credentials_path):
-    """Authenticate gspread with Google Sheets API using a service account JSON key file."""
-    gc = gspread.service_account(filename=json_credentials_path)
+def authenticate_gspread():
+    json_credentials = os.getenv("CREDENTIAL")
+    credentials_dict = json.loads(base64.b64decode(json_credentials).decode("utf-8"))
+    gc = gspread.service_account_info(credentials_dict)
+    # gc = gspread.service_account(filename=json_credentials_path)
     return gc
 
 
 def insert_data(sheet_url, data, worksheet_index=0):
     """Insert data into a Google Sheet."""
     try:
-        gc = authenticate_gspread("nomadic-vertex-441318-f9-0ccaaac332ab.json")
+
+        gc = authenticate_gspread()
         sh = gc.open_by_url(sheet_url)
 
         worksheet = sh.get_worksheet(worksheet_index)
@@ -74,5 +78,5 @@ def main(url, sheet_url):
 
 
 url = "https://colintalkscrypto.com/cbbi/data/latest.json"
-sheet_url = "https://docs.google.com/spreadsheets/d/1iZkQ7T8q3QqKsrPmC6MVF-PYAUox7_9nnTi97MxZWYw/edit?usp=sharing"
+sheet_url = os.getenv("GOOGLE_SHEET_URL")
 main(url, sheet_url)
