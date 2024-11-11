@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from itertools import islice
 import gspread
 from gspread.exceptions import SpreadsheetNotFound, APIError, GSpreadException
-import json, os, base64
+import os
 
 
 def fetch_json_data(url):
@@ -20,7 +20,8 @@ def fetch_json_data(url):
         if json_data:
             data = json_data["Confidence"]
             converted_data = {
-                (datetime.fromtimestamp(int(timestamp)) + timedelta(days=1)).strftime(
+                (datetime.fromtimestamp(int(timestamp))).strftime(
+                    # (datetime.fromtimestamp(int(timestamp)) + timedelta(days=1)).strftime(
                     "%Y-%m-%d"
                 ): str(value * 100)
                 for timestamp, value in data.items()
@@ -40,9 +41,6 @@ def fetch_json_data(url):
 
 
 def authenticate_gspread():
-    # json_credentials = os.getenv("CREDENTIAL")
-    # credentials_dict = json.loads(base64.b64decode(json_credentials).decode("utf-8"))
-    # gc = gspread.service_account_info(credentials_dict)
     gc = gspread.service_account(filename="credential.json")
     return gc
 
