@@ -1,0 +1,2 @@
+gspread==6.1.4
+Requests==2.32.3
