@@ -48,7 +48,6 @@ def authenticate_gspread():
 def insert_data(sheet_url, data, worksheet_index=0):
     """Insert data into a Google Sheet."""
     try:
-
         gc = authenticate_gspread()
         sh = gc.open_by_url(sheet_url)
 
