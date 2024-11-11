@@ -19,6 +19,9 @@ jobs:
       
       - name: Install dependencies  
         run: pip install -r requirements.txt 
+        
+      - name: Decode Credentials File  
+        run: echo "${{ secrets.CREDENTIAL }}" | base64 --decode > credential.json
       
       - name: Run script  
         env:
