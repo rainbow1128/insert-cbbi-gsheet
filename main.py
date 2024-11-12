@@ -21,7 +21,7 @@ def fetch_json_data(url):
             data = json_data["Confidence"]
             converted_data = {
                 (datetime.fromtimestamp(int(timestamp))).strftime(
-                    # (datetime.fromtimestamp(int(timestamp)) + timedelta(days=1)).strftime(
+                    # (datetime.fromtimestamp(int(timestamp)) + timedelta(days=1)).strftime( 
                     "%Y-%m-%d"
                 ): str(value * 100)
                 for timestamp, value in data.items()
